@@ -35,11 +35,22 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
+                            //собираем мап с ключом по дате
         return meals.stream().collect(Collectors.groupingBy(m -> m.getDateTime().toLocalDate()))
-                                                    .values().stream().filter(userMeals -> userMeals.stream().map(UserMeal::getCalories)
-                                                    .reduce(0, Integer::sum) > caloriesPerDay).flatMap(List<UserMeal>::stream)
-                                                    .filter(e->(e.getDateTime().toLocalTime().equals(startTime) || e.getDateTime().toLocalTime().isAfter(startTime)) && e.getDateTime().toLocalTime().isBefore(endTime))
-                                                    .map(e-> new UserMealWithExcess(e.getDateTime(),e.getDescription(),e.getCalories(),true))
-                                                    .collect(Collectors.toList());
+
+                            //фильтруем по превышению суммой калорий за дату
+                            .values().stream().filter(userMeals -> userMeals.stream().map(UserMeal::getCalories).reduce(0, Integer::sum) > caloriesPerDay)
+
+                            //т.к. value мапы был список UserMeal - переходим от Stream<List<UserMeal>> к Stream<UserMeal>
+                            .flatMap(List<UserMeal>::stream)
+
+                            //фильтруем UserMeal по времени startTime включительно и endTime строго
+                            .filter(e->(e.getDateTime().toLocalTime().equals(startTime) || e.getDateTime().toLocalTime().isAfter(startTime)) && e.getDateTime().toLocalTime().isBefore(endTime))
+
+                            //каждый UserMeal преобразовываем в UserMealWIthExcess
+                            .map(e-> new UserMealWithExcess(e.getDateTime(),e.getDescription(),e.getCalories(),true))
+
+                            //собираем List
+                            .collect(Collectors.toList());
     }
 }
