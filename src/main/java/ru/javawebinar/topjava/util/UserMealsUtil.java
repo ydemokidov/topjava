@@ -22,15 +22,60 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
         );
 
-        /*List<UserMealWithExcess> mealsTo = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-        mealsTo.forEach(System.out::println);*/
+        List<UserMealWithExcess> mealsTo = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        mealsTo.forEach(System.out::println);
 
         System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         // TODO return filtered list with excess. Implement by cycles
-        return null;
+        List<UserMealWithExcess> results = new ArrayList<>();
+
+        Map<LocalDate,List<UserMealWithExcess>> MealsGrouppedByDates = new TreeMap<>();
+        Map<LocalDate,Integer> caloriesByDate = new HashMap<>();
+        Map<LocalDate,Boolean> addedToResults = new HashMap<>();
+
+        for(UserMeal meal : meals){
+            LocalDate dt = meal.getDateTime().toLocalDate();
+            LocalTime tm = meal.getDateTime().toLocalTime();
+
+            //фиксируем даты для передачи в итоговый результат
+            if(!addedToResults.containsKey(dt)){
+                addedToResults.put(dt,false);
+            }
+
+                //добавляем калории в расчет
+            if(caloriesByDate.containsKey(dt)){
+                caloriesByDate.put(dt, caloriesByDate.get(dt)+meal.getCalories());
+            }else{
+                caloriesByDate.put(dt, meal.getCalories());
+            }
+            // если калории за день превышены
+            if(caloriesByDate.get(dt)>caloriesPerDay){
+                if(!addedToResults.get(dt)) {
+                    results.addAll(MealsGrouppedByDates.get(dt));
+                    addedToResults.put(dt, true);
+                }else{
+                    //если было превышение и передали из карты в резeльтат и проходит по фильтру- то добавляем сразу в результат
+                    if((tm.equals(startTime)|| tm.isAfter(startTime)&& tm.isBefore(endTime))) {
+                        results.add(new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), true));
+                    }
+                }
+            }else{
+                // если проходит по фильтру времени
+                if((tm.equals(startTime)|| tm.isAfter(startTime)&& tm.isBefore(endTime))){
+                    if(MealsGrouppedByDates.containsKey(dt)){
+                        MealsGrouppedByDates.get(dt).add(new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), true));
+                    }else{
+                        MealsGrouppedByDates.put(dt, new ArrayList<>());
+                        MealsGrouppedByDates.get(dt).add(new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), true));
+                    }
+                }
+            }
+        }
+
+        return results;
     }
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
