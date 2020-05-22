@@ -32,8 +32,12 @@ public class UserMealsUtil {
         // TODO return filtered list with excess. Implement by cycles
         List<UserMealWithExcess> results = new ArrayList<>();
 
+        //предварительная сборка результатов по датам, пока ещё не знаем - превышены калории за день или нет
         Map<LocalDate,List<UserMealWithExcess>> MealsGrouppedByDates = new TreeMap<>();
+
+        //подсчет калорий по датам
         Map<LocalDate,Integer> caloriesByDate = new HashMap<>();
+        //если калории за день превышены - фиксируем здесь что добавили результаты из промежуточной карты в итоговый лист и для этой даты промежуточную более не используем
         Map<LocalDate,Boolean> addedToResults = new HashMap<>();
 
         for(UserMeal meal : meals){
