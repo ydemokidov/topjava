@@ -1,0 +1,20 @@
+.mealExceededRow{
+    background-color: coral;
+    border: solid;
+    border-width: 0.2px;
+    border-color: red;
+    border-radius: 5px;
+}
+
+.mealRow{
+    background-color: aquamarine;
+    border: solid;
+    border-width: 0.2px;
+    border-color: aqua;
+    border-radius: 5px;
+}
+
+.column{
+    display: inline-block;
+    width: 150px;
+}
