@@ -1,7 +1,8 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.model.MealsDB;
+import ru.javawebinar.topjava.model.MealsDatabase;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,9 +17,15 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.debug("get meals with exceed");
-        req.setAttribute("mealsList",MealsUtil.getAllMealTo());
-        log.debug("forward meals with exceed to meals.jsp");
+        MealsDatabase mealsdb = MealsDB.getDb();
+        if(req.getParameter("id") == null){
+            log.debug("get all meals");
+            req.setAttribute("mealsList",mealsdb.getAllMeals());
+        }else{
+            long id = Long.parseLong(req.getParameter("id"));
+            log.debug("get meal with id: "+id);
+            req.setAttribute("mealsList",mealsdb.getMealById(id));
+        }
         req.getRequestDispatcher("meals.jsp").forward(req,resp);
     }
 }

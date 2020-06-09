@@ -17,7 +17,7 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <hr>
-<h2>Users</h2>
+<h2>Meals</h2>
     <div class = "mealsList">
         <c:forEach items="${mealsList}" var = "mealTo">
             <c:choose>
@@ -39,6 +39,7 @@
                         </div>
                     </div>
         </c:forEach>
-    </div>
+    </div><br/>
+            <a href="meals/create">Create</a>
 </body>
 </html>
