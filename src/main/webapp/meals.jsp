@@ -37,6 +37,12 @@
                         <div class="column">
                         <c:out value="${mealTo.getCalories()}"/>
                         </div>
+                        <div class="column">
+                            <a href="meals/update?id=${mealTo.getId()}">Редактировать</a>
+                        </div>
+                        <div class="column">
+                            <a href="meals/delete?id=${mealTo.getId()}">Удалить</a>
+                        </div>
                     </div>
         </c:forEach>
     </div><br/>

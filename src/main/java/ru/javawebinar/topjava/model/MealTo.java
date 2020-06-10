@@ -23,6 +23,10 @@ public class MealTo {
         this.excess = excess;
     }
 
+    public long getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "MealTo{" +
