@@ -81,7 +81,7 @@ public class MealServlet extends HttpServlet {
             default:
                 log.info("getAll");
                 request.setAttribute("meals",
-                        mealRestController.getAll());
+                        mealRestController.getFilteredMeals(null,null,null,null));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
