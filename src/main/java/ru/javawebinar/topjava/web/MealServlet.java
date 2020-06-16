@@ -30,7 +30,6 @@ public class MealServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        //repository = new InMemoryMealRepository();
         appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
     }
 
@@ -47,7 +46,6 @@ public class MealServlet extends HttpServlet {
                 Integer.parseInt(request.getParameter("calories")),SecurityUtil.authUserId());
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        //repository.save(meal);
         if(meal.isNew()){
             mealRestController.create(meal);
         }else{
@@ -59,7 +57,6 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        //int userId = SecurityUtil.authUserId();
 
         MealRestController mealRestController = appCtx.getBean(MealRestController.class);
 
@@ -84,8 +81,7 @@ public class MealServlet extends HttpServlet {
             default:
                 log.info("getAll");
                 request.setAttribute("meals",
-                        //MealsUtil.getTos(repository.getAll(userId), MealsUtil.DEFAULT_CALORIES_PER_DAY));
-                        MealsUtil.getTos(mealRestController.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                        mealRestController.getAll());
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

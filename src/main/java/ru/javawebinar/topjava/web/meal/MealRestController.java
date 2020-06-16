@@ -3,6 +3,8 @@ package ru.javawebinar.topjava.web.meal;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.util.Collection;
@@ -19,8 +21,8 @@ public class MealRestController {
         return service.get(id, SecurityUtil.authUserId());
     }
 
-    public Collection<Meal> getAll() {
-        return service.getAll(SecurityUtil.authUserId());
+    public Collection<MealTo> getAll() {
+        return  MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()),SecurityUtil.authUserCaloriesPerDay());
     }
 
     public boolean delete(int id) {
@@ -28,7 +30,7 @@ public class MealRestController {
     }
 
     public void update(Meal meal){
-        Meal m = service.get(meal.getId(),meal.getUserId());
+        Meal m = service.get(meal.getId(),SecurityUtil.authUserId());
         if(m!=null){
             service.update(meal);
         }
