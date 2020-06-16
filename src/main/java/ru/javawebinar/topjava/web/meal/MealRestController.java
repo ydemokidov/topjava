@@ -28,7 +28,7 @@ public class MealRestController {
     }
 
     public void update(Meal meal){
-        Meal m = service.get(meal.getId(),SecurityUtil.authUserId());
+        Meal m = service.get(meal.getId(),meal.getUserId());
         if(m!=null){
             service.update(meal);
         }
