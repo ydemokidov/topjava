@@ -3,8 +3,11 @@ package ru.javawebinar.topjava.service;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 
 @Service
@@ -44,4 +47,7 @@ public class MealService {
         repository.save(meal);
     }
 
+    public Collection<Meal> getFilteredMeals(int userId, LocalDate beginDt, LocalDate endDt, LocalTime beginTm, LocalTime endTm){
+        return repository.getFilteredMeals(userId, beginDt, endDt, beginTm, endTm);
+    }
 }

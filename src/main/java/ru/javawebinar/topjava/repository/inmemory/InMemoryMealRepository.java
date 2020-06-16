@@ -3,14 +3,18 @@ package ru.javawebinar.topjava.repository.inmemory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
@@ -61,6 +65,20 @@ public class InMemoryMealRepository implements MealRepository {
                 return -1;
             }
         }).collect(Collectors.toList());
+    }
+
+    public Collection<Meal> getFilteredMeals(int userId,LocalDate beginDt, LocalDate endDt, LocalTime beginTm, LocalTime endTm){
+        Stream<Meal> result = getAll(userId).stream();
+        if(beginDt!=null){
+            result = result.filter(m-> m.getDate().isAfter(beginDt) || m.getDate().isEqual(beginDt));
+        }
+        if(endDt!= null){
+            result = result.filter(m-> m.getDate().isBefore(endDt) || m.getDate().isEqual(endDt));
+        }
+        if(beginTm!=null && endTm!=null){
+            result = result.filter(m-> DateTimeUtil.isBetweenHalfOpen(m.getTime(),beginTm,endTm));
+        }
+        return result.collect(Collectors.toList());
     }
 }
 

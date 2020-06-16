@@ -47,16 +47,6 @@ public class MealRestController {
     }
 
     public Collection<MealTo> getFilteredMeals(LocalDate beginDt, LocalDate endDt, LocalTime beginTm, LocalTime endTm){
-        Stream<Meal> result = getAll().stream();
-        if(beginDt!=null){
-            result = result.filter(m-> m.getDate().isAfter(beginDt) || m.getDate().isEqual(beginDt));
-        }
-        if(endDt!= null){
-            result = result.filter(m-> m.getDate().isBefore(endDt) || m.getDate().isEqual(endDt));
-        }
-        if(beginTm!=null && endTm!=null){
-            result = result.filter(m-> DateTimeUtil.isBetweenHalfOpen(m.getTime(),beginTm,endTm));
-        }
-        return MealsUtil.getTos(result.collect(Collectors.toList()), SecurityUtil.authUserCaloriesPerDay());
+        return MealsUtil.getTos(service.getFilteredMeals(SecurityUtil.authUserId(),beginDt,endDt,beginTm,endTm),SecurityUtil.authUserCaloriesPerDay());
     }
 }
