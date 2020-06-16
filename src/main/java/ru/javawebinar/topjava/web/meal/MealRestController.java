@@ -52,7 +52,7 @@ public class MealRestController {
             result = result.filter(m-> m.getDate().isAfter(beginDt) || m.getDate().isEqual(beginDt));
         }
         if(endDt!= null){
-            result = result.filter(m-> m.getDate().isBefore(endDt));
+            result = result.filter(m-> m.getDate().isBefore(endDt) || m.getDate().isEqual(endDt));
         }
         if(beginTm!=null && endTm!=null){
             result = result.filter(m-> DateTimeUtil.isBetweenHalfOpen(m.getTime(),beginTm,endTm));
