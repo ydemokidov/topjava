@@ -22,9 +22,10 @@ public class MealTestData {
             new Meal(100007,LocalDateTime.of(2001, Month.SEPTEMBER, 29, 1, 0,1), "Еда 15", 250)
             );
 
-    public static Meal userMeal = new Meal(LocalDateTime.of(2001,9,28,1,0,1),"Еда 1",200);
-    static{
-        userMeal.setId(testMealId);
+    public static Meal userMeal = new Meal(testMealId,LocalDateTime.of(2001,9,28,1,0,1),"Еда 1",200);
+
+    public static Meal getNew(){
+        return new Meal(null,LocalDateTime.of(2001,9,30,1,0,1),"Еда 22",300);
     }
 
     public static void assertMatch(Meal actual,Meal expected){
@@ -37,5 +38,11 @@ public class MealTestData {
 
     public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected){
         assertThat(actual).usingDefaultElementComparator().isEqualTo(expected);
+    }
+
+    public static Meal getUpdated(){
+        Meal m = getNew();
+        m.setId(testMealId);
+        return m;
     }
 }
