@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 @NamedQueries({
         @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m where m.id=:id and m.user.id =:user_id"),
-        @NamedQuery(name = Meal.ALL_SORTED,query = "SELECT m FROM Meal m where m.user.id=:user_id"),
-        @NamedQuery(name = Meal.FILTERED_BY_DATE,query = "SELECT m from Meal m where m.user.id=:user_id and m.dateTime>=:startDt and m.dateTime<:endDt"),
+        @NamedQuery(name = Meal.ALL_SORTED,query = "SELECT m FROM Meal m where m.user.id=:user_id order by m.dateTime desc"),
+        @NamedQuery(name = Meal.FILTERED_BY_DATE,query = "SELECT m from Meal m where m.user.id=:user_id and m.dateTime>=:startDt and m.dateTime<:endDt order by m.dateTime desc"),
         @NamedQuery(name = Meal.SINGLE_MEAL,query = "SELECT m from Meal m where m.id=:id and m.user.id =:user_id")
 })
 @Entity
