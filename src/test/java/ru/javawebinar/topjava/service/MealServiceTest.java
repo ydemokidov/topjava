@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,6 +14,9 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -26,6 +30,33 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
+
+    @Rule
+    public TestName testName = new TestName();
+
+    private Date startDttm;
+    private Date endDttm;
+
+    private static Map<String,Long> methodsTimingMap = new HashMap<>();
+
+    @Before
+    public void setStartDttm(){
+        startDttm = new Date();
+    }
+
+    @After
+    public void logTestTime(){
+        endDttm = new Date();
+        long milliseconds = endDttm.getTime()-startDttm.getTime();
+        methodsTimingMap.put(testName.getMethodName(),milliseconds);
+    }
+
+    @AfterClass
+    public static void printMethodTimings(){
+        for(Map.Entry<String,Long> e : methodsTimingMap.entrySet()){
+            System.out.println(e.getKey()+" : "+e.getValue());
+        }
+    }
 
     @Autowired
     private MealService service;
