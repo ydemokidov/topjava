@@ -10,6 +10,7 @@ import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ public class JspMealController {
         LocalDateTime dttm = LocalDateTime.parse(formData.get("dateTime"));
         int calories = Integer.parseInt(formData.get("calories"));
         String description = formData.get("description");
+        description = new String(description.getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
         if(formData.get("id").isEmpty()){
             m = new Meal(dttm,description,calories);
             mealService.create(m,SecurityUtil.authUserId());
@@ -64,10 +66,4 @@ public class JspMealController {
         model.addAttribute("meal",new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000));
         return "mealForm";
     }
-
-    @PostMapping("/create")
-    public String create(int id){
-        return "meals";
-    }
-
 }
