@@ -172,7 +172,7 @@
         <dependency>
             <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>
-<!--            <scope>runtime</scope>-->
+            <scope>runtime</scope>
             <version>${ehcache.version}</version>
         </dependency>
 
@@ -229,7 +229,7 @@
                 <dependency>
                     <groupId>org.hsqldb</groupId>
                     <artifactId>hsqldb</artifactId>
-                    <version>2.5.1</version>
+                    <version>2.5.0</version>
                 </dependency>
             </dependencies>
         </profile>
