@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ru.javawebinar.topjava.AllActiveProfileResolver;
+import ru.javawebinar.topjava.service.MealService;
 
 import javax.annotation.PostConstruct;
 
@@ -19,8 +20,6 @@ import javax.annotation.PostConstruct;
         "classpath:spring/spring-mvc.xml",
         "classpath:spring/spring-db.xml"
 })
-//@WebAppConfiguration
-//@ExtendWith(SpringExtension.class)
 @Transactional
 @ActiveProfiles(resolver = AllActiveProfileResolver.class)
 abstract public class AbstractControllerTest {
@@ -36,6 +35,9 @@ abstract public class AbstractControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    protected MealService mealService;
 
     @PostConstruct
     private void postConstruct() {
