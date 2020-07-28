@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class MealRestController extends AbstractMealController {
     static final String REST_URL = "/rest/meals";
 
     @Override
-    @GetMapping(value = "{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public Meal get(@PathVariable int id) {
         return super.get(id);
     }
@@ -28,11 +29,11 @@ public class MealRestController extends AbstractMealController {
         super.delete(id);
     }
 
-    @Override
+    /*@Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MealTo> getAll() {
         return super.getAll();
-    }
+    }*/
 
     @Override
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -48,9 +49,14 @@ public class MealRestController extends AbstractMealController {
         super.update(meal, id);
     }
 
-    @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MealTo> getBetween(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
-        return super.getBetween(startDate, startTime, endDate, endTime);
+    public List<MealTo> getBetween(@RequestParam(value="startdt",required = false) LocalDateTime startDateTime,
+                                   @RequestParam(value = "enddt",required = false) LocalDateTime endDateTime) {
+        if(startDateTime!=null && endDateTime!=null){
+            //return super.getBetween(startDate, startTime, endDate, endTime);
+            return null;
+        }else{
+            return super.getAll();
+        }
     }
 }
