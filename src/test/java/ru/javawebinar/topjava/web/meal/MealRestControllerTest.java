@@ -3,25 +3,29 @@ package ru.javawebinar.topjava.web.meal;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.matcher.AssertionMatcher;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.javawebinar.topjava.MealTestData;
+import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
-import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.SecurityUtil;
+import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static ru.javawebinar.topjava.web.meal.MealRestController.REST_URL;
 
 class MealRestControllerTest extends AbstractControllerTest {
@@ -50,7 +54,13 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void delete() {
+    void deleteTest() throws Exception {
+        perform(delete(REST_URL+"/"+MEAL1_ID))
+                .andDo(print())
+                .andExpect(status().is(204));
+        assertThrows(NotFoundException.class,()->{
+            Meal m = mealService.get(MEAL1_ID,SecurityUtil.authUserId());
+        });
     }
 
     @Test
@@ -73,14 +83,32 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void create() {
+    void create() throws Exception {
+        MvcResult result = perform(post(REST_URL)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(JsonUtil.writeValue(MealTestData.getNew())))
+                            .andDo(print())
+                            .andExpect(status().isNoContent())
+                            .andReturn();
+        Meal actual = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<Meal>() {});
+        Meal expected = mealService.get(actual.getId(),SecurityUtil.authUserId());
+        MEAL_MATCHER.assertMatch(actual,expected);
     }
 
     @Test
-    void update() {
+    void update() throws Exception {
+        Meal updated = getUpdated();
+        MvcResult result = perform(put(REST_URL+"/"+updated.getId())
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(JsonUtil.writeValue(updated)))
+                            .andDo(print())
+                            .andExpect(status().isNoContent())
+                            .andReturn();
+        MEAL_MATCHER.assertMatch(updated,mealService.get(updated.getId(),SecurityUtil.authUserId()));
     }
 
     @Test
     void getBetween() {
+
     }
 }

@@ -29,16 +29,11 @@ public class MealRestController extends AbstractMealController {
         super.delete(id);
     }
 
-    /*@Override
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MealTo> getAll() {
-        return super.getAll();
-    }*/
-
     @Override
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Meal create(Meal meal) {
+    public Meal create(@RequestBody Meal meal) {
+
         return super.create(meal);
     }
 
