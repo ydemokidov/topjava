@@ -13,11 +13,17 @@ import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -108,7 +114,20 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getBetween() {
+    void getBetween() throws Exception {
+        DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        LocalDateTime startdt = LocalDateTime.of(2020, Month.JANUARY, 29,0,0,0);
+        LocalDateTime enddt = LocalDateTime.of(2020, Month.FEBRUARY, 1,23,0,0);
+        List<Meal> expected = mealService.getBetweenInclusive(startdt.toLocalDate(),enddt.toLocalDate(),SecurityUtil.authUserId());
 
+        MvcResult result = perform(get(REST_URL)
+                                    .param("startdt",dateTimeFormat.format(startdt))
+                                    .param("enddt",dateTimeFormat.format(enddt)))
+                            .andDo(print())
+                            .andExpect(status().isOk())
+                            .andReturn();
+        List<Meal> actual = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Meal>>() {});
+
+        MEAL_MATCHER.assertMatch(actual,expected);
     }
 }
