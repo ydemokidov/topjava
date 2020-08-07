@@ -13,7 +13,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/meals")
+@RequestMapping("/ui/meals")
 public class MealUIController extends AbstractMealController{
 
     @Override
