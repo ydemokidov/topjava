@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,10 +33,13 @@ public class MealUIController extends AbstractMealController{
     @PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void upsert(@RequestParam Integer id,
-                       @RequestParam LocalDateTime datetime,
+                       @RequestParam String dateTime,
                        @RequestParam String description,
                        @RequestParam Integer calories){
-        Meal meal = new Meal(id,datetime,description,calories);
+
+        LocalDateTime created = DateTimeUtil.parseLocalDateTime(dateTime);
+
+        Meal meal = new Meal(id,created,description,calories);
         if(meal.isNew()){
             super.create(meal);
         }else{
