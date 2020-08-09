@@ -34,3 +34,12 @@ $(function () {
         }
     );
 });
+
+function filter() {
+    const datatable = $("#datatable").DataTable();
+    $.get("ui/meals/filter?"+filterForm.serialize(), function(newDataArray) {
+        datatable.clear();
+        datatable.rows.add(newDataArray);
+        datatable.draw();
+    });
+}

@@ -1,4 +1,4 @@
-var context, form;
+var context, form, filterForm;
 
 function makeEditable(ctx) {
     context = ctx;
@@ -8,6 +8,8 @@ function makeEditable(ctx) {
             deleteRow($(this).attr("id"));
         }
     });
+
+    filterForm =$('#filterForm');
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
