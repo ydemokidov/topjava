@@ -15,9 +15,10 @@ import static ru.javawebinar.topjava.UserTestData.*;
 class DataJpaUserServiceTest extends AbstractUserServiceTest {
     @Test
     void getWithMeals() throws Exception {
-        User user = service.getWithMeals(USER_ID);
-        USER_MATCHER.assertMatch(user, USER);
-        MealTestData.MEAL_MATCHER.assertMatch(user.getMeals(), MealTestData.MEALS);
+        User admin = service.getWithMeals(ADMIN_ID);
+        USER_MATCHER.assertMatch(admin, ADMIN);
+        MealTestData.MEAL_MATCHER.assertMatch(admin.getMeals(), MealTestData.ADMIN_MEAL2, MealTestData.ADMIN_MEAL1);
+        USER_WITH_MEALS_MATCHER.assertMatch(admin, ADMIN);
     }
 
     @Test
