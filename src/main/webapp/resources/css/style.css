@@ -6,6 +6,17 @@ tr[data-mealExcess="true"] {
     color: red;
 }
 
+.data-mealExcessY{
+    color:red;
+}
+
+.data-mealExcessN{
+    color:green;
+}
+.hiddenElement{
+    display: none;
+}
+
 .fa {
     cursor: pointer;
 }

@@ -12,7 +12,6 @@ import ru.javawebinar.topjava.to.MealTo;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,17 +34,17 @@ public class MealUIController extends AbstractMealController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createOrUpdate(@Valid MealTo mealTo, BindingResult result) {
+    public ResponseEntity<String> createOrUpdate(@Valid Meal meal, BindingResult result) {
         if (result.hasErrors()) {
             String errorFieldsMsg = result.getFieldErrors().stream()
                     .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
                     .collect(Collectors.joining("<br>"));
             return ResponseEntity.unprocessableEntity().body(errorFieldsMsg);
         }
-        if (mealTo.isNew()) {
-            super.create(mealTo);
+        if (meal.isNew()) {
+            super.create(meal);
         }else{
-            super.update(mealTo,mealTo.getId());
+            super.update(meal,meal.getId());
         }
         return  ResponseEntity.ok().build();
     }
