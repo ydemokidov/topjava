@@ -23,7 +23,7 @@ public abstract class AbstractMealController {
     @Autowired
     private MealService service;
 
-    public Meal get(int id) {
+    public Meal get(Integer id) {
         int userId = SecurityUtil.authUserId();
         log.info("get meal {} for user {}", id, userId);
         return service.get(id, userId);

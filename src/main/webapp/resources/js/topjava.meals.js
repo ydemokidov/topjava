@@ -1,4 +1,4 @@
-var mealAjaxUrl = "profile/meals";
+var mealAjaxUrl = "profile/meals/";
 
 function updateFilteredTable() {
     $.ajax({

@@ -33,6 +33,12 @@ public class MealUIController extends AbstractMealController {
         super.delete(id);
     }
 
+    @Override
+    @GetMapping(value = "/{id}")
+    public Meal get(@PathVariable Integer id) {
+        return super.get(id);
+    }
+
     @PostMapping
     public ResponseEntity<String> createOrUpdate(@Valid Meal meal, BindingResult result) {
         if (result.hasErrors()) {
