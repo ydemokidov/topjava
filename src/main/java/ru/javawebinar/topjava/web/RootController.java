@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class RootController {
 
     @Autowired
-    private MealService mealService;
+    UserService userService;
 
     @GetMapping("/")
     public String root() {
@@ -31,14 +31,12 @@ public class RootController {
     @PostMapping("/users")
     public String setUser(HttpServletRequest request) {
         int userId = Integer.parseInt(request.getParameter("userId"));
-        SecurityUtil.setAuthUserId(userId);
+        //SecurityUtil.setAuthUserId(userId);
         return "redirect:meals";
     }
 
     @GetMapping("/meals")
-    public String getMeals(Model model) {
-        model.addAttribute("meals",
-                MealsUtil.getTos(mealService.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay()));
+    public String getMeals() {
         return "meals";
     }
 }
